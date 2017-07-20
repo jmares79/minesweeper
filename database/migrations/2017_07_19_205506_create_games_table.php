@@ -15,11 +15,10 @@ class CreateGamesTable extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
             $table->integer('status');
-            $table->boolean('started');
-            $table->boolean('saved');
-            $table->boolean('resumed');
+            $table->boolean('started')->default(false);
+            $table->boolean('saved')->default(false);
+            $table->boolean('resumed')->default(false);
             $table->timestamps();
         });
     }
