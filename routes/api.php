@@ -13,10 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/newgame/{rows}/{columns}/{mines}', 'GameController@newGame');
+Route::post('/game/{rows}/{columns}/{mines}', 'GameController@newGame')->where(['rows' => '[0-9]+', 'columns' => '[0-9]+', 'mines' => '[0-9]+']);
+Route::get('/game/{id}', 'GameController@getGame')->where(['id' => '[0-9]+']);
 Route::post('/save', 'GameController@save');
-Route::get('/resume/{id}', 'GameController@resume');
-Route::get('/checkCell/{row}/{column}', 'GridController@checkCell');
-Route::post('/mark/{row}/{column}', 'GridController@markCell');
+Route::get('/resume/{id}', 'GameController@resume')->where(['id' => '[0-9]+']);
+Route::get('/checkCell/{row}/{column}', 'GridController@checkCell')->where(['row' => '[0-9]+', 'column' => '[0-9]+']);
+Route::post('/mark/{row}/{column}', 'GridController@markCell')->where(['row' => '[0-9]+', 'column' => '[0-9]+']);
+
 Route::get('/user/add', 'UserController@add');
 Route::get('/users', 'UserController@getAll');

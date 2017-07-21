@@ -8,11 +8,11 @@ class Grid extends Model
 {
     public function game()
     {
-        return $this->belongsTo('App\Game');
+        return $this->belongsTo(Game::class);
     }
 
     public function marks()
     {
-        return $this->hasMany('App\Mark');
+        return $this->hasMany(Mark::class);
     }
 }

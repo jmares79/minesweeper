@@ -19,7 +19,7 @@ class CreateGridsTable extends Migration
             $table->integer('rows');
             $table->integer('columns');
             $table->integer('mines');
-            $table->boolean('completed');
+            $table->boolean('completed')->default(false);
             $table->timestamps();
         });
     }

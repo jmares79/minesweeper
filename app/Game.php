@@ -8,11 +8,11 @@ class Game extends Model
 {
     public function grid()
     {
-        return $this->hasOne('App\Grid');
+        return $this->hasOne(Grid::class);
     }
 
     public function savings()
     {
-        return $this->hasMany('App\Saving');
+        return $this->hasMany(Saving::class);
     }
 }

@@ -18,7 +18,7 @@ class CreateMarksTable extends Migration
             $table->integer('grid_id');
             $table->integer('row');
             $table->integer('column');
-            $table->integer('type');
+            $table->char('type');
             $table->timestamps();
         });
     }
