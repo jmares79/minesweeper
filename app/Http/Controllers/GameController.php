@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Service\Game\GameService as GameService;
+use App\Service\Game\GameService;
 
 class GameController extends Controller
 {
@@ -17,6 +17,8 @@ class GameController extends Controller
 
     public function newGame($rows, $columns, $mines)
     {
+        if (!$this->game->isValidGrid($rows, $columns, $mines)) return response()->json(['http' => Response::HTTP_BAD_REQUEST]);
+
         try {
             $game = $this->game->createGame($rows, $columns, $mines);
 

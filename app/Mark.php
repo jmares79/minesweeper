@@ -8,6 +8,6 @@ class Mark extends Model
 {
     public function grid()
     {
-        $this->belongsTo('App\Grid');
+        $this->belongsTo(Grid::class);
     }
 }
