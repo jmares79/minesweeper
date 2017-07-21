@@ -14,6 +14,10 @@ class GameService implements GameCreatorInterface
     const FINISHED = 2;
     const MINE = 'M';
 
+    /**
+     * @ApiDescription(section="App\Service\Game", description="Creates the game")
+     * @ApiReturn(type="game")
+     */
     public function createGame($rows, $columns, $mines)
     {
         $game = new Game();
@@ -29,6 +33,10 @@ class GameService implements GameCreatorInterface
         return $game;
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Game", description="Creates the grid")
+     * @ApiReturn(type="grid")
+     */
     protected function createGrid($rows, $columns, $mines)
     {
         $grid = new Grid();
@@ -40,6 +48,10 @@ class GameService implements GameCreatorInterface
         return $grid;
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Game", description="Sets the mines on the grid")
+     * @ApiReturn(type="void")
+     */
     public function setMinesOnGrid($grid, $rows, $columns, $mines)
     {
         while ($mines > 0) {
@@ -52,6 +64,10 @@ class GameService implements GameCreatorInterface
         }
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Game", description="Creates a mark")
+     * @ApiReturn(type="void")
+     */
     protected function createMark($grid, $row, $col)
     {
         $mark = new Mark();
@@ -63,6 +79,10 @@ class GameService implements GameCreatorInterface
         $mark->save();
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Game", description="Check if the gris is valid")
+     * @ApiReturn(type="boolean")
+     */
     public function isValidGrid($rows, $columns, $mines)
     {
         if ($mines >= $rows * $columns) return false;
