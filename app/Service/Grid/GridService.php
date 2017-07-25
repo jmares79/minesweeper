@@ -9,6 +9,7 @@ use App\Mark;
 class GridService implements GridCalculatorInterface
 {
     protected $grid;
+    protected $adjacentMines;
     protected $cellToCheck = array();
     protected $returnedList = array();
     protected $revealedCells = array();
@@ -18,11 +19,19 @@ class GridService implements GridCalculatorInterface
         $this->grid = $grid;
         $hasMine = $this->hasMine($row, $column);
 
-        if ($hasMine && $this->firstCheck($row, $column)) {
+        if ($hasMine) {
             return $this->revealedCells[] = array(
                 'row' => $row,
                 'column' => $column,
-                'mine' => true
+                'mine' => true,
+                'adjacentMines' => null
+            );
+        } if (!$hasMine && $this->hasAdjacentMines($row, $column)) {
+            return $this->revealedCells[] = array(
+                'row' => $row,
+                'column' => $column,
+                'mine' => false,
+                'adjacentMines' => count($this->adjacentMines)
             );
         } else {
             $this->revealAdjacentCells($row, $column);
@@ -30,7 +39,32 @@ class GridService implements GridCalculatorInterface
 
         return $this->returnedList;
     }
+    
+    protected function hasAdjacentMines($row, $column)
+    {
+        $minesInGrid = $this->grid->marks()->where('type', 'M')->get();
+        $this->adjacentMines = $this->getAdjancentMines($row, $column, $minesInGrid);
 
+        return (count($this->adjacentMines) > 0);
+    }
+
+    protected function getAdjancentMines($row, $column, $minesInGrid)
+    {
+        $mines = $minesInGrid->filter(function($mine) use ($row, $column) {
+            return (
+                ($mine->row == $row - 1 && $mine->column == $column - 1) || 
+                ($mine->row == $row - 1 && $mine->column == $column)     || 
+                ($mine->row == $row - 1 && $mine->column == $column + 1) || 
+                ($mine->row == $row     && $mine->column == $column + 1) || 
+                ($mine->row == $row + 1 && $mine->column == $column + 1) || 
+                ($mine->row == $row + 1 && $mine->column == $column)     || 
+                ($mine->row == $row + 1 && $mine->column == $column - 1) || 
+                ($mine->row == $row     && $mine->column == $column - 1)
+            );
+        });
+
+        return $mines;
+    }
 
     public function revealAdjacentCells($row, $column)
     {
