@@ -75,7 +75,7 @@ class GridService implements GridCalculatorInterface
             $cell['adjacentMines']++;
             $this->revealedCells[] = $cell;
 
-            echo "<pre> MINE in row: $row - col: $column FROM CELL: ". $cell['row'] . "-" . $cell['row'] ."</pre>";
+            echo "<pre> MINE in row: $row - col: $column FROM CELL: ". $cell['row'] . "-" . $cell['column'] ."</pre>";
             echo "<pre>"; var_dump($cell); echo "</pre>";
 
             return;
