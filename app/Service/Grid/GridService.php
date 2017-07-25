@@ -37,7 +37,7 @@ class GridService implements GridCalculatorInterface
             $this->revealAdjacentCells($row, $column);
         }
 
-        return $this->returnedList;
+        return $this->revealedCells;
     }
     
     protected function hasAdjacentMines($row, $column)
@@ -68,33 +68,31 @@ class GridService implements GridCalculatorInterface
 
     public function revealAdjacentCells($row, $column)
     {
-        echo "HERE with row: $row - col: $column<br>";
+        if ($this->coordinatesOutOfBounds($row, $column)) { return; }
+        if ($this->cellAlreadyVisited($row, $column)) { return; }
 
-        if ($this->coordinatesOutOfBounds($row, $column)) { echo "COOB<br>"; return; }
-        if ($this->cellAlreadyVisited($row, $column)) { echo "CAV<br>"; return; }
-        echo "passed checks<br>";
+        if ($this->hasAdjacentMines($row, $column)) { 
+            $this->revealedCells[]= array(
+                'row' => $row,
+                'column' => $column,
+                'adjacentMines' => count($this->adjacentMines)
+            );
 
-        //The bug here is that when popping, obviously is only the last one! So that's the one that gets updated
-        //Instead I have to find the one belonging to $row & $column and update that!
+            return;
+        }
+
         if ($this->hasMine($row, $column)) {
             $cell = array_pop($this->revealedCells);
             $cell['adjacentMines']++;
             $this->revealedCells[] = $cell;
 
-            echo "<pre> MINE in row: $row - col: $column FROM CELL: ". $cell['row'] . "-" . $cell['column'] ."</pre>";
-            echo "<pre>"; var_dump($cell); echo "</pre>";
-
             return;
         } else {
-            echo "<pre> ADDING cell $row - $column to array</pre>";
-
             $this->revealedCells[] = array(
                 'row' => $row,
                 'column' => $column,
                 'adjacentMines' => 0
             );
-
-            echo "<pre>"; var_dump($this->revealedCells); echo "</pre>";
         }
 
         $this->revealAdjacentCells($row - 1, $column - 1); //NW
@@ -105,9 +103,6 @@ class GridService implements GridCalculatorInterface
         $this->revealAdjacentCells($row + 1, $column); //South
         $this->revealAdjacentCells($row + 1, $column - 1); //SW
         $this->revealAdjacentCells($row, $column - 1); //West
-
-        $final = array_pop($this->revealedCells);
-        if (!$this->alreadyLoaded($final)) { $this->returnedList[] = $final; }
     }
 
     protected function hasMine($row, $col)
