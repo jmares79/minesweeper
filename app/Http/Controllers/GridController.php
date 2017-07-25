@@ -33,7 +33,7 @@ class GridController extends Controller
 
         if ($grid == null) { return response()->json(['http' => Response::HTTP_NOT_FOUND]); }
 
-        $result = $this->grid->checkCell($grid, $row, $column);
+        $cells = $this->grid->checkCell($grid, $row, $column);
 
         return response()->json(['http' => Response::HTTP_OK, 'cells' => $cells]);
     }

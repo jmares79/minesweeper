@@ -7,5 +7,5 @@ namespace App\Interfaces;
  */
 interface GridCalculatorInterface
 {
-    public function revealAdjacentCells();
+    public function revealAdjacentCells($row, $column);
 }
