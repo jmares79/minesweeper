@@ -68,23 +68,28 @@ class GridService implements GridCalculatorInterface
         if ($this->cellAlreadyVisited($row, $column)) { echo "CAV<br>"; return; }
         echo "passed checks<br>";
 
+        //The bug here is that when popping, obviously is only the last one! So that's the one that gets updated
+        //Instead I have to find the one belonging to $row & $column and update that!
         if ($this->hasMine($row, $column)) {
             $cell = array_pop($this->revealedCells);
             $cell['adjacentMines']++;
             $this->revealedCells[] = $cell;
 
-            echo "<pre> MINE in row: $row - col: $column FROM CELL: ". $cell['row']."-".$cell['row']."</pre>";
+            echo "<pre> MINE in row: $row - col: $column FROM CELL: ". $cell['row'] . "-" . $cell['row'] ."</pre>";
             echo "<pre>"; var_dump($cell); echo "</pre>";
 
             return;
         } else {
             echo "<pre> ADDING cell $row - $column to array</pre>";
+
             $this->revealedCells[] = array(
                 'row' => $row,
                 'column' => $column,
                 'mine' => false,
                 'adjacentMines' => 0
             );
+
+            echo "<pre>"; var_dump($this->revealedCells); echo "</pre>";
         }
 
         $this->revealAdjacentCells($row - 1, $column - 1); //NW
