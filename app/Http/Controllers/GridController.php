@@ -38,8 +38,14 @@ class GridController extends Controller
         return response()->json(['http' => Response::HTTP_OK, 'cells' => $cells]);
     }
 
-    public function markCell($row, $column)
+    public function markCell($gridId, $row, $column)
     {
-        echo "markCell";
+        $grid = Grid::find($gridId);
+
+        if ($grid == null) { return response()->json(['http' => Response::HTTP_NOT_FOUND]); }
+
+        $cell = $this->grid->markCell($grid, $row, $column);
+
+        return response()->json(['http' => Response::HTTP_OK, 'cells' => $cell]);
     }
 }

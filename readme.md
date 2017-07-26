@@ -9,7 +9,7 @@ Develop the classic game of Minesweeper (in bold acomplished items at the time o
   * __Design and implement  a documented RESTful API for the game (think of a mobile app for your API)__
   * Implement an API client library for the API designed above. Ideally, in a different language, of your preference, to the one used for the API
   * __When a cell with no adjacent mines is revealed, all adjacent squares will be revealed (and repeat)__
-  * Ability to 'flag' a cell with a question mark or red flag
+  * __Ability to 'flag' a cell with a question mark or red flag__
   * Detect when game is over
   * __Persistence__
   * Time tracking
@@ -37,7 +37,7 @@ The main structure is obviously based in the one provided by Laravel, using the 
 - GameCreatorInterface
 - GridCalculatorInterface
 
-Created for flexible creation, mine setting on the grid (GameCreatorInterface) and cell revealing pattern (GridCalculatorInterface). 
+Created for flexible creation, mine setting on the grid (GameCreatorInterface) and cell revealing pattern (GridCalculatorInterface).
 Implementing these interfaces will allow future developers to easily change the way the creation and mine setting is handled, supporting SOLID principles in that way.
 
 
@@ -45,7 +45,7 @@ Implementing these interfaces will allow future developers to easily change the 
 
 1. Clone the repo from this repository
 2. Execute `composer install` for vendor dependencies, once the repo was succesfully cloned.
-2. Copy `.env.example`to `.env` and manage your database credentials accordingly. 
+2. Copy `.env.example`to `.env` and manage your database credentials accordingly.
 2. Create a database called __minesweeper__ (or any name you like) in MySQL, as stated in `.env`.
 3. Execute `php artisan migrate` for the physical creation of the Schema and Models.
 4. Execute `php artisan serve` for the development server or set a custom web server as desired.

@@ -18,7 +18,7 @@ Route::get('/game/{id}', 'GameController@getGame')->where(['id' => '[0-9]+']);
 Route::post('/save', 'GameController@save');
 Route::get('/resume/{id}', 'GameController@resume')->where(['id' => '[0-9]+']);
 Route::get('/checkCell/{gridId}/{row}/{column}', 'GridController@checkCell')->where(['gridId' => '[0-9]+', 'row' => '[0-9]+', 'column' => '[0-9]+']);
-Route::post('/mark/{row}/{column}', 'GridController@markCell')->where(['row' => '[0-9]+', 'column' => '[0-9]+']);
+Route::post('/mark/{gridId}/{row}/{column}', 'GridController@markCell')->where(['row' => '[0-9]+', 'column' => '[0-9]+']);
 
 Route::get('/user/add', 'UserController@add');
 Route::get('/users', 'UserController@getAll');

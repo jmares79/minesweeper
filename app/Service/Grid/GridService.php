@@ -3,16 +3,24 @@
 namespace App\Service\Grid;
 
 use App\Interfaces\GridCalculatorInterface;
+use App\Service\Game\GameService;
 use App\Grid;
 use App\Mark;
 
 class GridService implements GridCalculatorInterface
 {
     protected $grid;
+    protected $gameService;
     protected $adjacentMines;
     protected $cellToCheck = array();
     protected $returnedList = array();
     protected $revealedCells = array();
+    const FLAG = 'F';
+
+    public function __construct(GameService $gameService)
+    {
+        $this->gameService = $gameService;
+    }
 
     public function checkCell($grid, $row, $column)
     {
@@ -39,7 +47,7 @@ class GridService implements GridCalculatorInterface
 
         return $this->revealedCells;
     }
-    
+
     protected function hasAdjacentMines($row, $column)
     {
         $minesInGrid = $this->grid->marks()->where('type', 'M')->get();
@@ -52,13 +60,13 @@ class GridService implements GridCalculatorInterface
     {
         $mines = $minesInGrid->filter(function($mine) use ($row, $column) {
             return (
-                ($mine->row == $row - 1 && $mine->column == $column - 1) || 
-                ($mine->row == $row - 1 && $mine->column == $column)     || 
-                ($mine->row == $row - 1 && $mine->column == $column + 1) || 
-                ($mine->row == $row     && $mine->column == $column + 1) || 
-                ($mine->row == $row + 1 && $mine->column == $column + 1) || 
-                ($mine->row == $row + 1 && $mine->column == $column)     || 
-                ($mine->row == $row + 1 && $mine->column == $column - 1) || 
+                ($mine->row == $row - 1 && $mine->column == $column - 1) ||
+                ($mine->row == $row - 1 && $mine->column == $column)     ||
+                ($mine->row == $row - 1 && $mine->column == $column + 1) ||
+                ($mine->row == $row     && $mine->column == $column + 1) ||
+                ($mine->row == $row + 1 && $mine->column == $column + 1) ||
+                ($mine->row == $row + 1 && $mine->column == $column)     ||
+                ($mine->row == $row + 1 && $mine->column == $column - 1) ||
                 ($mine->row == $row     && $mine->column == $column - 1)
             );
         });
@@ -71,7 +79,7 @@ class GridService implements GridCalculatorInterface
         if ($this->coordinatesOutOfBounds($row, $column)) { return; }
         if ($this->cellAlreadyVisited($row, $column)) { return; }
 
-        if ($this->hasAdjacentMines($row, $column)) { 
+        if ($this->hasAdjacentMines($row, $column)) {
             $this->revealedCells[]= array(
                 'row' => $row,
                 'column' => $column,
@@ -143,5 +151,10 @@ class GridService implements GridCalculatorInterface
         }
 
         return false;
+    }
+
+    public function markCell($grid, $row, $column)
+    {
+        $this->gameService->createMark($grid, $row, $column, self::FLAG);
     }
 }
