@@ -1,51 +1,57 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Minesweeper
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+This project is based on the code challenge provided as a test for a remote Sr PHP dev position.
+It consists of a REST API crated with the [Laravel framework](https://laravel.com/)
 
-## About Laravel
+## Objective
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+Develop the classic game of Minesweeper (in bold acomplished items at the time of writing this README)
+  * __Design and implement  a documented RESTful API for the game (think of a mobile app for your API)__
+  * Implement an API client library for the API designed above. Ideally, in a different language, of your preference, to the one used for the API
+  * __When a cell with no adjacent mines is revealed, all adjacent squares will be revealed (and repeat)__
+  * Ability to 'flag' a cell with a question mark or red flag
+  * Detect when game is over
+  * __Persistence__
+  * Time tracking
+  * Ability to start a new game and preserve/resume the old ones
+  * __Ability to select the game parameters: number of rows, columns, and mines__
+  * Ability to support multiple users/accounts
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Structure of the project
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+The main structure is obviously based in the one provided by Laravel, using the internal development server provided by PHP and powered by MySQL DBMS.
 
-## Learning Laravel
+### Main classes
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+- > GameController: It controls the creation, saving, resuming and retrieving of all or any game.
+- > GridController: Performs the algorithm for checking and marking a cell within the grid.
+- > UserController: Will control the managing of users for games (TO DO)
+- > Game: Model/Entity for managing a game
+- > Grid: Model/Entity for managing a grid
+- > Mark: Model/Entity for managing a mark
+- > GameService: Holds the logic for creating a game, a grid (for the new game created), setting mines on grid and all neccesary checking.
+- > GridService: Holds the logic for checking a certain cell within it, and calculate all cells when no mine is present on first check (Item 3 of objective list)
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+### Interfaces
 
-## Laravel Sponsors
+- GameCreatorInterface
+- GridCalculatorInterface
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
+Created for flexible creation, mine setting on the grid (GameCreatorInterface) and cell revealing pattern (GridCalculatorInterface). 
+Implementing these interfaces will allow future developers to easily change the way the creation and mine setting is handled, supporting SOLID principles in that way.
 
-- **[Vehikl](http://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Styde](https://styde.net)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
 
-## Contributing
+### Installation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+1. Clone the repo from this repository
+2. Execute `composer install` for vendor dependencies, once the repo was succesfully cloned.
+2. Copy `.env.example`to `.env` and manage your database credentials accordingly. 
+2. Create a database called __minesweeper__ (or any name you like) in MySQL, as stated in `.env`.
+3. Execute `php artisan migrate` for the physical creation of the Schema and Models.
+4. Execute `php artisan serve` for the development server or set a custom web server as desired.
 
-## Security Vulnerabilities
+### Usage
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+As this is an API, use a REST Client (I use [Postman](https://www.getpostman.com/)), and in the URL enter:
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+`https:\\<local.server.domain>:<port>\api\<route>` where <route> is in `api.php`
