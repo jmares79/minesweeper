@@ -3,17 +3,29 @@
 namespace App\Service\Grid;
 
 use App\Interfaces\GridCalculatorInterface;
+use App\Service\Game\GameService;
 use App\Grid;
 use App\Mark;
 
 class GridService implements GridCalculatorInterface
 {
     protected $grid;
+    protected $gameService;
     protected $adjacentMines;
     protected $cellToCheck = array();
     protected $returnedList = array();
     protected $revealedCells = array();
+    const FLAG = 'F';
 
+    public function __construct(GameService $gameService)
+    {
+        $this->gameService = $gameService;
+    }
+
+    /**
+     * @ApiDescription(section="App\Service\Grid", description="Check the cell for mines, adjacent mines or empty spaces")
+     * @ApiReturn(type="mixed", description="Returns all the information about a cell")
+     */
     public function checkCell($grid, $row, $column)
     {
         $this->grid = $grid;
@@ -39,7 +51,7 @@ class GridService implements GridCalculatorInterface
 
         return $this->revealedCells;
     }
-    
+
     protected function hasAdjacentMines($row, $column)
     {
         $minesInGrid = $this->grid->marks()->where('type', 'M')->get();
@@ -52,13 +64,13 @@ class GridService implements GridCalculatorInterface
     {
         $mines = $minesInGrid->filter(function($mine) use ($row, $column) {
             return (
-                ($mine->row == $row - 1 && $mine->column == $column - 1) || 
-                ($mine->row == $row - 1 && $mine->column == $column)     || 
-                ($mine->row == $row - 1 && $mine->column == $column + 1) || 
-                ($mine->row == $row     && $mine->column == $column + 1) || 
-                ($mine->row == $row + 1 && $mine->column == $column + 1) || 
-                ($mine->row == $row + 1 && $mine->column == $column)     || 
-                ($mine->row == $row + 1 && $mine->column == $column - 1) || 
+                ($mine->row == $row - 1 && $mine->column == $column - 1) ||
+                ($mine->row == $row - 1 && $mine->column == $column)     ||
+                ($mine->row == $row - 1 && $mine->column == $column + 1) ||
+                ($mine->row == $row     && $mine->column == $column + 1) ||
+                ($mine->row == $row + 1 && $mine->column == $column + 1) ||
+                ($mine->row == $row + 1 && $mine->column == $column)     ||
+                ($mine->row == $row + 1 && $mine->column == $column - 1) ||
                 ($mine->row == $row     && $mine->column == $column - 1)
             );
         });
@@ -66,12 +78,16 @@ class GridService implements GridCalculatorInterface
         return $mines;
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Grid", description="Reveals cells for its content, performing the logic of revealing cells")
+     * @ApiReturn(type="mixed", description="Returns a cell with the coordinates of a mine if found it, a cell with the amount of adjancent mines, if no mines found on first click, or a list with the empty cells until cell(s) with adjacent mines are found")
+     */
     public function revealAdjacentCells($row, $column)
     {
         if ($this->coordinatesOutOfBounds($row, $column)) { return; }
         if ($this->cellAlreadyVisited($row, $column)) { return; }
 
-        if ($this->hasAdjacentMines($row, $column)) { 
+        if ($this->hasAdjacentMines($row, $column)) {
             $this->revealedCells[]= array(
                 'row' => $row,
                 'column' => $column,
@@ -143,5 +159,14 @@ class GridService implements GridCalculatorInterface
         }
 
         return false;
+    }
+
+    /**
+     * @ApiDescription(section="App\Service\Grid", description="Performs the marking of a cell")
+     * @ApiReturn(type="void")
+     */
+    public function markCell($grid, $row, $column)
+    {
+        $this->gameService->createMark($grid, $row, $column, self::FLAG);
     }
 }

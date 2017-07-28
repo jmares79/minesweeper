@@ -68,13 +68,13 @@ class GameService implements GameCreatorInterface
      * @ApiDescription(section="App\Service\Game", description="Creates a mark")
      * @ApiReturn(type="void")
      */
-    protected function createMark($grid, $row, $col)
+    public function createMark($grid, $row, $col, $type = null)
     {
         $mark = new Mark();
 
         $mark->row = $row;
         $mark->column = $col;
-        $mark->type = self::MINE;
+        $mark->type = $type == null ? self::MINE : $type;
         $grid->marks()->save($mark);
         $mark->save();
     }
