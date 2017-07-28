@@ -22,6 +22,10 @@ class GridService implements GridCalculatorInterface
         $this->gameService = $gameService;
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Grid", description="Check the cell for mines, adjacent mines or empty spaces")
+     * @ApiReturn(type="mixed", description="Returns all the information about a cell")
+     */
     public function checkCell($grid, $row, $column)
     {
         $this->grid = $grid;
@@ -74,6 +78,10 @@ class GridService implements GridCalculatorInterface
         return $mines;
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Grid", description="Reveals cells for its content, performing the logic of revealing cells")
+     * @ApiReturn(type="mixed", description="Returns a cell with the coordinates of a mine if found it, a cell with the amount of adjancent mines, if no mines found on first click, or a list with the empty cells until cell(s) with adjacent mines are found")
+     */
     public function revealAdjacentCells($row, $column)
     {
         if ($this->coordinatesOutOfBounds($row, $column)) { return; }
@@ -153,6 +161,10 @@ class GridService implements GridCalculatorInterface
         return false;
     }
 
+    /**
+     * @ApiDescription(section="App\Service\Grid", description="Performs the marking of a cell")
+     * @ApiReturn(type="void")
+     */
     public function markCell($grid, $row, $column)
     {
         $this->gameService->createMark($grid, $row, $column, self::FLAG);

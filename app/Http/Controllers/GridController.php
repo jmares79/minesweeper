@@ -20,11 +20,11 @@ class GridController extends Controller
      * @ApiDescription(section="Grid", description="Check the status of a cell for a certain grid")
      * @ApiMethod(type="get")
      * @ApiRoute(name="/checkCell/{grid}/{row}/{column}")
-     * @ApiParams(name="grid", type="integer")
+     * @ApiParams(name="gridId", type="integer")
      * @ApiParams(name="row", type="integer")
      * @ApiParams(name="column", type="integer")
      * @ApiReturnHeaders("HTTP 201 OK")
-     * @ApiReturnHeaders("HTTP 400 BAD_REQUEST")
+     * @ApiReturnHeaders("HTTP 404 HTTP_NOT_FOUND")
      * @ApiReturn(type="JsonResponse", description="Returns the content of the cell, or an array with empty cells until finding a mine neighbour")
      */
     public function checkCell($gridId, $row, $column)
@@ -38,6 +38,17 @@ class GridController extends Controller
         return response()->json(['http' => Response::HTTP_OK, 'cells' => $cells]);
     }
 
+    /**
+     * @ApiDescription(section="Grid", description="Mark a cell with a flag status")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/mark/{gridId}/{row}/{column}")
+     * @ApiParams(name="gridId", type="integer")
+     * @ApiParams(name="row", type="integer")
+     * @ApiParams(name="column", type="integer")
+     * @ApiReturnHeaders("HTTP 201 OK")
+     * @ApiReturnHeaders("HTTP 404 HTTP_NOT_FOUND")
+     * @ApiReturn(type="JsonResponse", description="Returns the content of the cell")
+     */
     public function markCell($gridId, $row, $column)
     {
         $grid = Grid::find($gridId);

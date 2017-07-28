@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/game/{rows}/{columns}/{mines}', 'GameController@newGame')->where(['rows' => '[0-9]+', 'columns' => '[0-9]+', 'mines' => '[0-9]+']);
+Route::post('/game/{rows}/{columns}/{mines}', 'GameController@newGame')->where(['rows' => '[0-9]+', 'columns' => '[0-9]+', 'mines' => '[0-9]+'])->middleware('cors');
 Route::get('/game/{id}', 'GameController@getGame')->where(['id' => '[0-9]+']);
 Route::post('/save', 'GameController@save');
 Route::get('/resume/{id}', 'GameController@resume')->where(['id' => '[0-9]+']);
